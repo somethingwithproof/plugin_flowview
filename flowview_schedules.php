@@ -547,7 +547,7 @@ function edit_log($header_label, $report) {
 	?>
 	<tr class='even'>
 		<td>
-		<form id='form_schedule' action='flowview_schedules.php?action=edit&tab=logs&id=<?php print get_request_var('id');?>'>
+		<form id='form_schedule' action='flowview_schedules.php?action=edit&tab=logs&id=<?php print (int)get_filter_request_var('id'); ?>'>
 			<table class='filterTable'>
 				<tr>
 					<td>
@@ -581,7 +581,7 @@ function edit_log($header_label, $report) {
 			</table>
 		</form>
 		<script type='text/javascript'>
-		var id = '<?php print get_request_var('id');?>';
+		var id = '<?php print (int)get_filter_request_var('id'); ?>';
 
 		function applyFilter() {
 			strURL  = 'flowview_schedules.php?action=edit&id='+id+'&tab=logs&header=false';
@@ -596,15 +596,15 @@ function edit_log($header_label, $report) {
 		}
 
 		$(function() {
-			$('#clear').click(function() {
+			$('#clear').on('click', function() {
 				clearFilter();
 			});
 
-			$('#rows').change(function() {
+			$('#rows').on('change', function() {
 				applyFilter();
 			});
 
-			$('#form_schedule').submit(function(event) {
+			$('#form_schedule').on('submit', function(event) {
 				event.preventDefault();
 				applyFilter();
 			});
@@ -717,7 +717,7 @@ function edit_log($header_label, $report) {
 	?>
 	<div id='reportDiv'></div>
 	<script type='text/javascript'>
-	var log_id='<?php print get_request_var('id');?>';
+	var log_id='<?php print (int)get_filter_request_var('id'); ?>';
 
 	function exportLog() {
 		document.location = 'flowview_schedules.php?action=download&id='+log_id;
@@ -767,7 +767,7 @@ function edit_general($header_label, $report) {
 
 	$(function() {
 		$('#start').after("<i id='startDate' class='calendar fa fa-calendar' title='<?php print __esc('Start Date Selector', 'flowview');?>'></i>");
-		$('#startDate').click(function() {
+		$('#startDate').on('click', function() {
 			if (startOpen) {
 				startOpen = false;
 				$('#start').datetimepicker('hide');
@@ -891,15 +891,15 @@ function show_schedules() {
 		}
 
 		$(function() {
-			$('#clear').click(function() {
+			$('#clear').on('click', function() {
 				clearFilter();
 			});
 
-			$('#rows').change(function() {
+			$('#rows').on('change', function() {
 				applyFilter();
 			});
 
-			$('#form_schedule').submit(function(event) {
+			$('#form_schedule').on('submit', function(event) {
 				event.preventDefault();
 				applyFilter();
 			});
