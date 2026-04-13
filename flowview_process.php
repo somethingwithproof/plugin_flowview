@@ -193,7 +193,9 @@ $last_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, ENGINE
 if (cacti_sizeof($last_tables)) {
 	foreach($last_tables as $table) {
 		if ($table['ENGINE'] != $raw_engine) {
-			flowview_db_execute("ALTER TABLE {$table['TABLE_NAME']} ENGINE=$raw_engine");
+			if (preg_match('/^[a-zA-Z0-9_]+$/', $table['TABLE_NAME']) && preg_match('/^[a-zA-Z0-9_]+$/', $raw_engine)) {
+				flowview_db_execute("ALTER TABLE {$table['TABLE_NAME']} ENGINE=$raw_engine");
+			}
 		}
 	}
 }
@@ -250,9 +252,11 @@ if ($maint) {
 			$date_part = str_replace('plugin_flowview_raw_', '', $t['TABLE_NAME']);
 
 			if ($date_part <  $remove_lessthan) {
-				$dropped++;
-				flowview_debug("Removing partitioned table 'plugin_flowview_raw_" . $date_part . "'");
-				flowview_db_execute('DROP TABLE plugin_flowview_raw_' . $date_part);
+				if (preg_match('/^[a-zA-Z0-9_]+$/', $date_part)) {
+					$dropped++;
+					flowview_debug("Removing partitioned table 'plugin_flowview_raw_" . $date_part . "'");
+					flowview_db_execute('DROP TABLE plugin_flowview_raw_' . $date_part);
+				}
 			}
 		}
 	}

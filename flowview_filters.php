@@ -75,15 +75,15 @@ function actions_filters() {
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') {
 				for ($i=0; $i<cacti_count($selected_items); $i++) {
-					flowview_db_execute('DELETE FROM plugin_flowview_queries WHERE id = ' . $selected_items[$i]);
+					flowview_db_execute_prepared('DELETE FROM plugin_flowview_queries WHERE id = ?', array($selected_items[$i]));
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '3') {
 				for ($i=0; $i<cacti_count($selected_items); $i++) {
-					flowview_db_execute("UPDATE plugin_flowview_queries SET enabled='' WHERE id = " . $selected_items[$i]);
+					flowview_db_execute_prepared("UPDATE plugin_flowview_queries SET enabled='' WHERE id = ?", array($selected_items[$i]));
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '4') {
 				for ($i=0; $i<cacti_count($selected_items); $i++) {
-					flowview_db_execute("UPDATE plugin_flowview_queries SET enabled='on' WHERE id = " . $selected_items[$i]);
+					flowview_db_execute_prepared("UPDATE plugin_flowview_queries SET enabled='on' WHERE id = ?", array($selected_items[$i]));
 				}
 /*			} elseif (get_nfilter_request_var('drp_action') == '2') {
 				for ($i=0; $i<cacti_count($selected_items); $i++) {

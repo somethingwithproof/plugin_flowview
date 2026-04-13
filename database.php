@@ -345,7 +345,9 @@ function flowview_db_table_create($table, $data, $cnn_id = false) {
 				array('flowview', $table));
 
 			if (isset($data['collate'])) {
-				flowview_db_execute("ALTER TABLE `$table` COLLATE = " . $data['collate']);
+				if (preg_match('/^[a-zA-Z0-9_]+$/', $table) && preg_match('/^[a-zA-Z0-9_]+$/', $data['collate'])) {
+					flowview_db_execute("ALTER TABLE `$table` COLLATE = " . $data['collate']);
+				}
 			}
 		}
 	}
