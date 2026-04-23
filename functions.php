@@ -5773,14 +5773,13 @@ function flowview_check_databases($import_only = false, $force = false) {
 				$wget_proxy = '';
 				if (!file_exists($local_file)) {
 					if ($proxy != '') {
-						$wget_proxy = "-e use_proxy=on -e http_proxy=$proxy";
-				                if ($proxy_user != '') {
-							$wget_proxy .= " --proxy-user=$proxy_user --proxy-passwd=$proxy_password";
+						$wget_proxy = ' -e use_proxy=on -e ' . cacti_escapeshellarg('http_proxy=' . $proxy);
+						if ($proxy_user != '') {
+							$wget_proxy .= ' --proxy-user=' . cacti_escapeshellarg($proxy_user) . ' --proxy-passwd=' . cacti_escapeshellarg($proxy_password);
 						}
-
 					}
 
-					$last_line  = exec("wget $wget_proxy --timeout=5 --output-document='$local_file' --output-file=/dev/null $remote_file", $output, $return_var);
+					$last_line = exec(cacti_escapeshellcmd(read_config_option('path_wget')) . " $wget_proxy --timeout=5 --output-document=" . cacti_escapeshellarg($local_file) . " --output-file=/dev/null " . cacti_escapeshellarg($remote_file), $output, $return_var);
 				}
 
 
@@ -6264,8 +6263,7 @@ function flowview_get_owner_from_arin($host) {
 					$origin = '';
 
 					if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
-						$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
-
+						$last_line = exec(cacti_escapeshellcmd($whois_path) . ' -h ' . cacti_escapeshellarg($whois_provider) . ' ' . cacti_escapeshellarg($cidr) . " | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
 						if (cacti_sizeof($output)) {
 							$origin = trim($output[0]);
 						}

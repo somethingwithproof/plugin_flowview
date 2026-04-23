@@ -124,8 +124,7 @@ if (cacti_sizeof($cidrs)) {
 
 		if ($origin == '') {
 			if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
-				$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
-
+				$last_line = exec(cacti_escapeshellcmd($whois_path) . ' -h ' . cacti_escapeshellarg($whois_provider) . ' ' . cacti_escapeshellarg($cidr) . " | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
 				/* attempt to prevent rate limiting */
 				sleep(1);
 
